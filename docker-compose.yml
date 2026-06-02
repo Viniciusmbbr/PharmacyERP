@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: pharmacy_db
+    environment:
+      POSTGRES_USER: pharmacy_user
+      POSTGRES_PASSWORD: pharmacy_password
+      POSTGRES_DB: pharmacy_erp
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pharmacy_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - pharmacy_network
+
+  # FastAPI Backend
+  backend:
+    build: .
+    container_name: pharmacy_api
+    environment:
+      DATABASE_URL: postgresql://pharmacy_user:pharmacy_password@postgres:5432/pharmacy_erp
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-your-secret-key-change-in-production}
+      JWT_ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      DEBUG: ${DEBUG:-False}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: uvicorn API.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - pharmacy_network
+    restart: unless-stopped
+
+  # Optional: pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pharmacy_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pharmacy.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - pharmacy_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  pharmacy_network:
+    driver: bridge
+
+# To run:
+# docker-compose up
+#
+# To run in background:
+# docker-compose up -d
+#
+# To stop:
+# docker-compose down
+#
+# To view logs:
+# docker-compose logs -f backend
+#
+# To access PostgreSQL:
+# docker exec -it pharmacy_db psql -U pharmacy_user -d pharmacy_erp
