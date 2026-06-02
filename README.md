@@ -1,8 +1,53 @@
-# 🏥 PharmacyERP
+<div align="center">
 
-Sistema de Gestão para Farmácias construído com **FastAPI**, **SQLAlchemy 2.0** e **WebSocket** em tempo real.
+<img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+<img src="https://img.shields.io/badge/FastAPI-0.104-009688?style=for-the-badge&logo=fastapi&logoColor=white"/>
+<img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white"/>
+<img src="https://img.shields.io/badge/SQLAlchemy-2.0-red?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/WebSocket-realtime-6DB33F?style=for-the-badge"/>
 
-> Projeto acadêmico com arquitetura limpa (Domain-Driven Design), autenticação JWT, conformidade farmacêutica FEFO e dashboard ao vivo.
+<br/><br/>
+
+# 💊 PharmacyERP
+
+**Sistema de Gestão Farmacêutica** — controle completo de estoque, vendas, fornecedores e relatórios com dashboard em tempo real.
+
+Projeto acadêmico desenvolvido na disciplina de **Análise e Desenvolvimento de Sistemas** — Centro Universitário UniFavip Wyden.
+
+</div>
+
+---
+
+## 📸 Interface
+
+> Dashboard principal com KPIs, gráficos e alertas em tempo real.
+
+<!--
+  💡 DICA: tire um screenshot real do sistema rodando e salve em docs/screenshot.png
+  Depois substitua o bloco SVG abaixo pela linha:
+  ![Dashboard PharmacyERP](docs/screenshot.png)
+-->
+
+<div align="center">
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  P PharmacyERP  │  Dashboard   Estoque   Preços   Vendas   Relatórios  │
+│─────────────────┼──────────────────────────────────────────────────────│
+│  📊 Dashboard   │  Vendas Hoje    Medicamentos    Alertas    Vencendo  │
+│  📦 Estoque     │  R$ 3.240 ↑    248 ativos       7 crítico  12 items  │
+│  💰 Preços      │─────────────────────────────────────────────────────│
+│  🛒 Vendas      │  Receita 7 Dias          Top Medicamentos            │
+│  👥 Clientes    │  ╭──────────────╮        Dipirona 500mg ████████ 142 │
+│  🚚 Fornecedores│  │  ~           │        Amoxicilina    ██████   98  │
+│  📈 Relatórios  │  │    ~  ╭──╮  │        Omeprazol      █████    76  │
+│                 │  ╰──────────╯──╯        Losartana      ████     54  │
+│  💡 Dica do Dia │  Seg Ter Qua Sex Dom   ─────────────────────────── │
+│  Revise validades│                        ⚠️ Insulina — estoque crítico│
+└─────────────────┴──────────────────────────────────────────────────────┘
+```
+
+</div>
 
 ---
 
@@ -10,237 +55,241 @@ Sistema de Gestão para Farmácias construído com **FastAPI**, **SQLAlchemy 2.0
 
 | Módulo | Descrição |
 |---|---|
-| 🔐 Autenticação | Login/registro com JWT e 4 níveis de acesso (roles) |
-| 💊 Medicamentos | CRUD completo com código EAN, preço de custo/venda |
-| 📦 Lotes | Controle de lotes com data de validade e rastreabilidade |
-| 🛒 Vendas | Fluxo completo com seleção automática FEFO |
-| 🚚 Compras | Gerenciamento de pedidos a fornecedores |
-| 🏢 Fornecedores | Cadastro e histórico de compras |
-| 🔔 Alertas | Notificações de estoque baixo e medicamentos próximos do vencimento |
-| 📊 Relatórios | Dashboard com KPIs e métricas em tempo real |
-| ⚡ WebSocket | Atualizações ao vivo sem necessidade de refresh |
+| 🏠 **Dashboard** | KPIs em tempo real — vendas do dia, ticket médio, alertas críticos e gráfico de receita semanal |
+| 📦 **Estoque** | Cadastro de medicamentos com código EAN, controle por lotes, alertas de validade e filtros |
+| 💰 **Preços** | Gestão de preço de custo e venda com cálculo automático de margem |
+| 🛒 **Vendas** | PDV com busca por nome, carrinho, formas de pagamento e emissão de recibo |
+| 👥 **Clientes** | Cadastro e histórico de compras por cliente |
+| 🚚 **Fornecedores** | Cadastro completo com CRUD e vinculação a pedidos de compra |
+| 📊 **Relatórios** | Gráficos de top medicamentos vendidos, receita por período e exportação CSV |
+| 🔔 **Alertas** | Notificações automáticas de estoque baixo e medicamentos próximos ao vencimento |
+| ⚡ **WebSocket** | Atualizações em tempo real no dashboard sem necessidade de recarregar a página |
 
 ---
 
-## 🛠️ Stack Tecnológica
+## 🏗️ Arquitetura
 
-- **Backend:** [FastAPI 0.104](https://fastapi.tiangolo.com/) + Python 3.10
-- **ORM:** [SQLAlchemy 2.0](https://docs.sqlalchemy.org/) com Mapped types
-- **Banco de dados:** SQLite (dev) / PostgreSQL (produção)
-- **Migrações:** [Alembic](https://alembic.sqlalchemy.org/)
-- **Validação:** [Pydantic v2](https://docs.pydantic.dev/)
-- **Autenticação:** JWT via `python-jose` + `bcrypt`
-- **WebSocket:** Nativo FastAPI
-- **Testes:** Pytest + HTTPX
-- **Containers:** Docker + Docker Compose
-
----
-
-## 📁 Estrutura do Projeto
+O projeto segue os princípios do **Domain-Driven Design (DDD)**, separando responsabilidades em camadas bem definidas:
 
 ```
-ERPPharmacy/
-├── API/
-│   ├── main.py              # Aplicação FastAPI (entry point)
-│   ├── schemas.py           # Schemas Pydantic (request/response)
-│   ├── exceptions.py        # Exceções customizadas
-│   ├── middleware.py        # Middleware de autenticação JWT
-│   ├── routes/              # Routers por domínio
-│   │   ├── auth_routes.py
-│   │   ├── medicamentos.py
-│   │   ├── lotes.py
-│   │   ├── vendas.py
-│   │   ├── compras.py
-│   │   ├── fornecedores.py
-│   │   ├── alertas.py
-│   │   ├── relatorios.py
-│   │   └── websocket_routes.py
-│   ├── websocket/           # Gerenciador de conexões WebSocket
-│   ├── index.html           # Dashboard principal
-│   ├── vendas.html          # Página de vendas
-│   ├── estoque.html         # Página de estoque
-│   ├── script.js            # Helpers de fetch e WebSocket
-│   └── Style.css
+PharmacyERP/
 │
-├── Application/
-│   └── services/            # Lógica de negócio
-│       ├── auth_service.py
-│       ├── medicamento_service.py
-│       ├── venda_service.py  # Inclui algoritmo FEFO
-│       ├── compra_service.py
-│       ├── lote_service.py
-│       ├── fornecedor_service.py
-│       ├── alerta_service.py
-│       └── relatorio_service.py
-│
-├── Domain/                  # Modelos ORM (entidades)
+├── Domain/                  # Entidades e regras de negócio
 │   ├── Medicamento.py
+│   ├── Venda.py
 │   ├── Lote.py
-│   ├── Venda.py             # Venda + VendaItem (com lote_id FEFO)
-│   ├── Compra.py
 │   ├── Fornecedor.py
-│   ├── Usuario.py
+│   ├── Compra.py
 │   ├── Alerta.py
-│   └── Enums/
+│   └── Enums/               # StatusCompra, StatusLote, TipoAlerta
 │
-├── Infrastructure/
-│   ├── database.py          # Configuração do SQLAlchemy
-│   ├── seeds.py             # Dados iniciais de exemplo
+├── Application/             # Casos de uso e serviços de aplicação
+│   └── services/
+│       ├── medicamento_service.py
+│       ├── venda_service.py
+│       ├── relatorio_service.py
+│       ├── alerta_service.py
+│       └── ...
+│
+├── Infrastructure/          # Banco de dados e configurações
+│   ├── database.py          # SQLAlchemy + SQLite
+│   ├── seeds.py             # Dados de demonstração
 │   └── logger.py
 │
-├── migrations/              # Alembic migrations
-├── tests/                   # Testes automatizados (10 testes)
-├── config.py                # Configurações centralizadas
-├── setup_database.py        # Script de inicialização do banco
+├── API/                     # Camada de apresentação
+│   ├── main.py              # Aplicação FastAPI
+│   ├── routes/              # Endpoints REST por domínio
+│   │   ├── medicamentos.py
+│   │   ├── vendas.py
+│   │   ├── fornecedores.py
+│   │   ├── relatorios.py
+│   │   ├── alertas.py
+│   │   └── auth_routes.py
+│   ├── websocket/           # Comunicação em tempo real
+│   │   ├── manager.py
+│   │   └── events.py
+│   ├── schemas.py           # Schemas Pydantic (request/response)
+│   ├── middleware.py        # Autenticação JWT
+│   │
+│   ├── index.html           # Frontend — SPA em HTML/CSS/JS puro
+│   ├── Style.css
+│   └── script.js
+│
+├── tests/                   # Testes com pytest + httpx
+│   ├── test_auth.py
+│   ├── test_medicamentos.py
+│   └── test_vendas.py
+│
+├── migrations/              # Alembic — controle de versão do banco
 ├── docker-compose.yml
-├── Dockerfile
 └── Requirements.txt
 ```
 
 ---
 
-## 🚀 Como Rodar
+## 🛠️ Tecnologias
 
-Veja o guia completo em **[COMO_RODAR.md](./COMO_RODAR.md)**.
+**Backend**
+- [FastAPI](https://fastapi.tiangolo.com/) — framework web assíncrono de alta performance
+- [SQLAlchemy 2.0](https://www.sqlalchemy.org/) — ORM com Mapped types e type hints
+- [Alembic](https://alembic.sqlalchemy.org/) — migrações de banco de dados
+- [Pydantic v2](https://docs.pydantic.dev/) — validação e serialização de dados
+- [python-jose](https://python-jose.readthedocs.io/) — autenticação JWT
+- [WebSockets](https://websockets.readthedocs.io/) — comunicação bidirecional em tempo real
 
-### Início rápido (3 comandos)
+**Frontend**
+- HTML5 / CSS3 / JavaScript puro — sem dependência de frameworks
+- [Chart.js](https://www.chartjs.org/) — gráficos interativos e responsivos
+- [Font Awesome 6](https://fontawesome.com/) — biblioteca de ícones
 
-```bash
-pip install -r Requirements.txt
-python setup_database.py
-uvicorn API.main:app --reload
-```
+**Banco de Dados**
+- SQLite — zero configuração, portátil, pronto para rodar localmente
 
-Acesse: [http://localhost:8000/docs](http://localhost:8000/docs)
+**Testes**
+- pytest, pytest-asyncio, httpx
 
 ---
 
-## 🔐 Credenciais Padrão
+## 🚀 Como rodar
 
-| Campo | Valor |
-|---|---|
-| Email | `admin@pharmacy.com` |
-| Senha | `Admin123!` |
+### Pré-requisitos
+
+- Python 3.11+
+- pip
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/Viniciusmbbr/PharmacyERP.git
+cd PharmacyERP
+```
+
+### 2. Crie e ative o ambiente virtual
+
+```bash
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# Linux/macOS
+source venv/bin/activate
+```
+
+### 3. Instale as dependências
+
+```bash
+pip install -r Requirements.txt
+```
+
+### 4. Configure o ambiente
+
+```bash
+cp .env.example .env
+# O projeto funciona com as configurações padrão — nenhuma edição necessária
+```
+
+### 5. Inicialize o banco de dados com dados de demonstração
+
+```bash
+python setup_database.py
+```
+
+### 6. Inicie a API
+
+```bash
+uvicorn API.main:app --reload
+```
+
+### 7. Abra o frontend
+
+Abra o arquivo `API/index.html` diretamente no navegador.  
+Recomendado: extensão **Live Server** no VS Code para recarregamento automático.
+
+> 🔗 API disponível em `http://localhost:8000`  
+> 📖 Documentação interativa (Swagger UI): `http://localhost:8000/docs`
+
+### Credenciais de demo
+
+| Usuário | Senha | Perfil |
+|---|---|---|
+| admin@farmacia.com | 123456 | Administrador |
+| farmaceutico@farmacia.com | 123456 | Farmacêutico |
+| caixa@farmacia.com | 123456 | Operador de Caixa |
 
 ---
 
 ## 🐳 Rodando com Docker
 
 ```bash
-# Subir API + PostgreSQL + pgAdmin
-docker-compose up
-
-# Em background
-docker-compose up -d
+docker-compose up --build
 ```
-
-| Serviço | URL |
-|---|---|
-| API | http://localhost:8000 |
-| Docs interativos | http://localhost:8000/docs |
-| pgAdmin | http://localhost:5050 |
-
----
-
-## 📡 Endpoints Principais
-
-### Auth
-| Método | Rota | Descrição |
-|---|---|---|
-| POST | `/auth/register` | Registrar novo usuário |
-| POST | `/auth/login` | Login e geração de token JWT |
-
-### Medicamentos
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/medicamentos` | Listar medicamentos (paginado) |
-| POST | `/medicamentos` | Cadastrar medicamento |
-| GET | `/medicamentos/{id}` | Buscar por ID |
-| PUT | `/medicamentos/{id}` | Atualizar |
-| DELETE | `/medicamentos/{id}` | Remover |
-
-### Vendas
-| Método | Rota | Descrição |
-|---|---|---|
-| POST | `/vendas` | Criar nova venda |
-| POST | `/vendas/{id}/finalizar` | Finalizar venda (baixa FEFO) |
-| POST | `/vendas/{id}/cancelar` | Cancelar venda |
-| GET | `/vendas` | Listar vendas |
-
-### WebSocket
-| Rota | Descrição |
-|---|---|
-| `ws://localhost:8000/ws/{channel}?token={jwt}` | Conectar ao canal em tempo real |
-
-**Canais disponíveis:** `dashboard`, `estoque`, `alertas`, `vendas`, `compras`, `geral`
-
-> Documentação completa e interativa disponível em `/docs` após rodar a API.
-
----
-
-## ⚙️ Variáveis de Ambiente
-
-Copie `.env.example` para `.env` e ajuste:
-
-```bash
-cp .env.example .env
-```
-
-| Variável | Padrão | Descrição |
-|---|---|---|
-| `DATABASE_URL` | `sqlite:///./pharmacy_erp.db` | URL de conexão com o banco |
-| `JWT_SECRET_KEY` | gerado automaticamente (dev) | **Obrigatório em produção** |
-| `JWT_ALGORITHM` | `HS256` | Algoritmo JWT |
-| `ACCESS_TOKEN_EXPIRE_MINUTES` | `30` | Expiração do token |
-| `DEBUG` | `True` | Modo debug |
-
-> ⚠️ Em produção, defina `JWT_SECRET_KEY` com uma string aleatória forte. A aplicação não sobe sem ela quando `ENV=production`.
 
 ---
 
 ## 🧪 Testes
 
 ```bash
-# Rodar todos os testes
 pytest tests/ -v
-
-# Resultado esperado
-# 10 passed, 15 warnings in ~3.5s
 ```
-
-**Cobertura dos testes:**
-- ✅ 6 testes de autenticação (registro, login, rotas protegidas)
-- ✅ 2 testes de medicamentos (CRUD)
-- ✅ 2 testes de vendas (criar e cancelar)
 
 ---
 
-## 🏗️ Arquitetura
+## 📡 Endpoints principais
 
-O projeto segue uma arquitetura em camadas inspirada em **Domain-Driven Design**:
+| Método | Rota | Descrição |
+|---|---|---|
+| `POST` | `/auth/login` | Autenticação e geração de token JWT |
+| `GET` | `/medicamentos` | Listar medicamentos com paginação |
+| `POST` | `/medicamentos` | Cadastrar novo medicamento |
+| `GET` | `/medicamentos/estoque/baixo` | Medicamentos com estoque crítico |
+| `GET` | `/medicamentos/vencimento/proximo` | Medicamentos próximos ao vencimento |
+| `GET` | `/vendas` | Listar vendas com paginação |
+| `POST` | `/vendas` | Registrar nova venda |
+| `PATCH` | `/vendas/{id}/finalizar` | Finalizar venda e baixar estoque automaticamente |
+| `GET` | `/vendas/{id}/recibo` | Gerar recibo de uma venda |
+| `GET` | `/fornecedores` | Listar fornecedores |
+| `GET` | `/relatorios/dashboard` | KPIs e dados do dashboard |
+| `GET` | `/relatorios/exportar/csv` | Exportar relatório de vendas em CSV |
+| `GET` | `/alertas` | Alertas pendentes (estoque e vencimento) |
+| `WS` | `/ws/{canal}` | WebSocket para atualizações em tempo real |
+
+Documentação completa com todos os endpoints e schemas: `http://localhost:8000/docs`
+
+---
+
+## 🗂️ Modelo de dados
 
 ```
-Requisição HTTP
-      ↓
-  API Routes        ← Validação (Pydantic), autenticação (JWT)
-      ↓
-  Services          ← Lógica de negócio (FEFO, alertas, cálculos)
-      ↓
-  Domain Models     ← Entidades ORM (SQLAlchemy 2.0)
-      ↓
-  Infrastructure    ← Banco de dados (SQLite / PostgreSQL)
+medicamento ──< lote
+medicamento ──< alerta
+medicamento ──< item_compra
+medicamento ──< item_venda (via venda)
+
+fornecedor ──< compra
+compra ──< item_compra
+
+usuario ──< venda
+venda ──< item_venda
 ```
 
-### FEFO — First Expired, First Out
+---
 
-Conformidade farmacêutica automática: ao finalizar uma venda, o sistema seleciona o lote com a data de validade mais próxima. O `lote_id` é armazenado em cada item de venda para rastreabilidade completa.
+## 👤 Autor
 
-### WebSocket em Tempo Real
+**Vinicius** — Estudante de Análise e Desenvolvimento de Sistemas
 
-Após finalizar uma venda, o `VendaService` faz broadcast para os canais `vendas` e `estoque`. Qualquer dashboard conectado atualiza os dados sem necessidade de refresh.
+[![GitHub](https://img.shields.io/badge/GitHub-Viniciusmbbr-181717?style=flat-square&logo=github)](https://github.com/Viniciusmbbr)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Conectar-0A66C2?style=flat-square&logo=linkedin)](https://linkedin.com/in/seu-perfil)
 
 ---
 
 ## 📄 Licença
 
-Distribuído sob a licença MIT. Veja [LICENSE](./LICENSE) para mais detalhes.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+
+<div align="center">
+<sub>Desenvolvido como projeto acadêmico — Centro Universitário UniFavip Wyden · 2025/2026</sub>
+</div>
