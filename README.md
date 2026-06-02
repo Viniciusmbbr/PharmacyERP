@@ -138,7 +138,14 @@ PharmacyERP/
 - [WebSockets](https://websockets.readthedocs.io/) — comunicação bidirecional em tempo real
 
 **Frontend**
-- HTML5 / CSS3 / JavaScript puro — sem dependência de frameworks
+
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/>
+<img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
+<img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white"/>
+<img src="https://img.shields.io/badge/Font_Awesome-538DD7?style=for-the-badge&logo=fontawesome&logoColor=white"/>
+
+- [HTML5](https://developer.mozilla.org/pt-BR/docs/Web/HTML) / [CSS3](https://developer.mozilla.org/pt-BR/docs/Web/CSS) / [JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript) puro — SPA sem dependência de frameworks
 - [Chart.js](https://www.chartjs.org/) — gráficos interativos e responsivos
 - [Font Awesome 6](https://fontawesome.com/) — biblioteca de ícones
 
@@ -277,7 +284,7 @@ venda ──< item_venda
 
 ## 👤 Autor
 
-**Vinicius** — Estudante de Análise e Desenvolvimento de Sistemas
+**ViniciusMB** — Estudante de Análise e Desenvolvimento de Sistemas
 
 [![GitHub](https://img.shields.io/badge/GitHub-Viniciusmbbr-181717?style=flat-square&logo=github)](https://github.com/Viniciusmbbr)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Conectar-0A66C2?style=flat-square&logo=linkedin)](https://linkedin.com/in/seu-perfil)
